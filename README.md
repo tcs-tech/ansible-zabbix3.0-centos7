@@ -21,5 +21,5 @@ CentOS7.x Minimal Install
  (7) sudo ansible-playbook -i hosts install.yml
  (8) インストール後Firewallを停止<br>
    systemctl stop firewalld<br>
- (9) ZabbixのURLに接続
+ (9) ZabbixのURLに接続<br>
  http://<SERVER IP Address>/zabbix/
