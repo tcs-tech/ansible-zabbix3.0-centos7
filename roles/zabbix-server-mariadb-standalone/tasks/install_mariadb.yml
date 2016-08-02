@@ -1,4 +1,4 @@
-# MariaDBのインストールと設定
+# Install MariaDB
 - name: Install mariadb
   yum: name={{ item }} state=latest
   with_items:
