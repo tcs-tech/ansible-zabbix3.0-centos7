@@ -1,0 +1,9 @@
+# MariaDBのインストールと設定
+- name: Install mariadb
+  yum: name={{ item }} state=latest
+  with_items:
+    - mariadb-server
+    - MySQL-python
+
+- name: start MariaDB and enabled
+  service: name=mariadb state=started enabled=yes

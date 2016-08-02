@@ -1,0 +1,87 @@
+- include: install_mariadb.yml
+- include: install_httpd.yml
+- include: install_php.yml
+- include: install_epel.yml
+
+# Download and install ZABBIX for CentOS7/RHEL7
+- name: Download ZABBIX Repo - CentOS7/RHEL7
+  get_url: url={{ zabbixRepository }} dest=/tmp/zabbix.rpm
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
+
+- name: Install ZABBIX Repo - CentOS7/RHEL7
+  command: rpm -ivh /tmp/zabbix.rpm creates=/etc/yum.repos.d/zabbix.repo
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
+
+- name: get {{ zabbixRpmGpgKey }}
+  get_url: url={{ zabbixRpmGpgKey }} dest=/tmp/RPM-GPG-KEY-ZABBIX
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
+
+- name: Import a key from a file
+  rpm_key: state=present key=/tmp/RPM-GPG-KEY-ZABBIX
+
+- name: Install zabbix-server
+  yum: name={{ item }} enablerepo=zabbix state=latest disable_gpg_check=no
+  with_items:
+    - zabbix-server-mysql
+    - zabbix-web-mysql
+    - zabbix-web-japanese
+#    - zabbix-get
+
+- name: disabled zabbix repository
+  lineinfile: dest=/etc/yum.repos.d/zabbix.repo regexp='^enabled' line="enabled=0"
+
+# Setting database
+- name: Create a new database
+  mysql_db: name={{ DBName }} state=present
+
+- name: Create database user and 'WITH GRANT OPTION'
+  mysql_user: name={{ DBUser }} password={{ DBPassword }} priv={{ DBName }}.*:ALL,GRANT state=present
+
+- name: Importing schema file
+  shell: mysql -u{{ DBUser }} -p{{ DBPassword }} {{ DBName }} -e "show tables;" | wc -l
+  register: zabbixDatabaseTebles
+  changed_when: False
+- shell: zcat /usr/share/doc/zabbix-server-mysql-*/create.sql.gz | mysql -u{{ DBUser }} -p{{ DBPassword }} {{ DBName }}
+  when: zabbixDatabaseTebles|int == 0
+
+# Setting zabbix_server.conf
+- name: Setting zabbix_server.conf
+  lineinfile: >-
+    dest='/etc/zabbix/zabbix_server.conf'
+    regexp='{{ item.regexp }}'
+    insertafter='{{ item.insertafter }}'
+    line='{{ item.line }}'
+  with_items:
+    - regexp: '^ListenPort='
+      insertafter: "^# ListenPort="
+      line: 'ListenPort={{ ListenPort }}'
+    - regexp: '^LogFile='
+      insertafter: "^# LogFile="
+      line: 'LogFile={{ LogFile }}'
+    - regexp: '^DBHost='
+      insertafter: "^# DBHost="
+      line: 'DBHost={{ DBHost }}'
+    - regexp: '^DBName='
+      insertafter: "^# DBName="
+      line: 'DBName={{ DBName }}'
+    - regexp: '^DBUser='
+      insertafter: "^# DBUser="
+      line: 'DBUser={{ DBUser }}'
+    - regexp: '^DBPassword='
+      insertafter: "^# DBPassword="
+      line: 'DBPassword={{ DBPassword }}'
+    - regexp: '^DBPort='
+      insertafter: "^# DBPort="
+      line: 'DBPort={{ DBPort }}'
+    - regexp: '^DBSocket='
+      insertafter: "^# DBSocket="
+      line: 'DBSocket={{ DBSocket }}'
+
+# Copy a new 'zabbix.conf.php' file into place
+- template: src=zabbix.conf.php.j2 dest=/etc/zabbix/web/zabbix.conf.php owner=apache group=apache mode=0644
+
+- name: start zabbix-server 
+  service: name=zabbix-server state=started enabled=yes
+
+- name: restart httpd
+  service: name=httpd state=restarted

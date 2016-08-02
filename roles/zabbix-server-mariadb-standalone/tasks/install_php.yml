@@ -1,0 +1,11 @@
+---
+# PHPのインストールとタイムゾーンの設定
+- name: Install php
+  yum: name=php state=latest
+
+- name: set php timezone
+  lineinfile: >- 
+    dest='/etc/php.ini'
+    regexp="^date.timezone ="
+    insertafter="^;date.timezone ="
+    line="date.timezone = {{ dateTimezone }}"
