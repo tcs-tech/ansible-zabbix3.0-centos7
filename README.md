@@ -13,4 +13,8 @@ CentOS7.x Minimal Install
  (3) sudo yum install -y ansible git<br>
  (4) sudo git clone [GitHub URL]<br>
  (5) cd ansible-zabbix3.0-centos7<br>
- (6) sudo ansible-playbook -i hosts install.yml
+ (6) vi group_vars/zabbix-server-mariadb-standalone<br>
+ ------<br>
+ DBPassword: <password> ← DBパスワードの設定<>br
+ ------<br>
+ (7) sudo ansible-playbook -i hosts install.yml
