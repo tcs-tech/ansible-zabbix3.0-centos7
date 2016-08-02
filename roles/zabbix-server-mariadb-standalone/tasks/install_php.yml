@@ -1,5 +1,4 @@
----
-# PHPのインストールとタイムゾーンの設定
+# Install PHP
 - name: Install php
   yum: name=php state=latest
 
