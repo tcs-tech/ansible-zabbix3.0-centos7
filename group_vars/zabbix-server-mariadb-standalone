@@ -1,6 +1,6 @@
 # Here are variables related to the ZABBIX-Server installation
 
-# /etc/php.iniタイムゾーンの定義
+# /etc/php.ini (Set PHP TimeZone)
 dateTimezone: Asia/Tokyo
 
 # EPEL repository for CentOS7/RHEL7
@@ -21,7 +21,7 @@ LogFile: /var/log/zabbix/zabbix_server.log
 DBHost: localhost
 DBName: zabbix
 DBUser: zabbix
-# DBパスワードの設定
+# Set DB Password
 DBPassword: <password>
 DBPort: 3306
 DBSocket: /var/lib/mysql/mysql.sock
