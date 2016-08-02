@@ -1,4 +1,3 @@
----
 # This ansible playbook deploys the ZABBIX3.0 server. 
 - hosts: zabbix-server-mariadb-standalone
   become: yes
