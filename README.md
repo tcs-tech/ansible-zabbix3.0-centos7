@@ -19,3 +19,7 @@ CentOS7.x Minimal Install
  DBPassword: <password> ← DBパスワードの設定<br>
  ------<br>
  (7) sudo ansible-playbook -i hosts install.yml
+ (8) インストール後Firewallを停止<br>
+   systemctl stop firewalld<br>
+ (9) ZabbixのURLに接続
+ http://<SERVER IP Address>/zabbix/
