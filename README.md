@@ -15,6 +15,6 @@ CentOS7.x Minimal Install
  (5) cd ansible-zabbix3.0-centos7<br>
  (6) vi group_vars/zabbix-server-mariadb-standalone<br>
  ------<br>
- DBPassword: <password> ← DBパスワードの設定<>br
+ DBPassword: <password> ← DBパスワードの設定<br>
  ------<br>
  (7) sudo ansible-playbook -i hosts install.yml
