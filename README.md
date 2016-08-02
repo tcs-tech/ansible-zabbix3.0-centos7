@@ -21,14 +21,14 @@ CentOS7.x Minimal Install
  (6) vi group_vars/zabbix-server-mariadb-standalone<br>
  ------<br>
  # Set DB Password<br>
- DBPassword: <password> ← DBパスワードの設定<br>
+ DBPassword: <password> ← Set MariaDB Password<br>
  ------<br>
  
- (7) Ansoble　playbookを利用してZabbix3.0のインストールを開始<br>
+ (7) Install on Zabbix3.0<br>
    sudo ansible-playbook -i hosts install.yml<br>
  
- (8) インストール後Firewallを停止<br>
+ (8) Stop firewall<br>
    systemctl stop firewalld<br>
  
- (9) ZabbixのURLに接続<br>
+ (9) Access to Zabbix<br>
  http://<SERVER IP Address>/zabbix/
