@@ -25,7 +25,7 @@ CentOS7.x Minimal Install
  ------<br>
  
  (7) Install on Zabbix3.0<br>
-   sudo ansible-playbook -i hosts install.yml<br>
+   sudo ansible-playbook -i hosts install.yml -vvv <br>
  
  (8) Stop firewall<br>
    systemctl stop firewalld<br>
