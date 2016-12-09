@@ -8,7 +8,7 @@ Ansible 1.4 or higher and platform.
 CentOS7.x Minimal Install
 
 #How to install
- (1) sudo yum install -y git epel-release<br>
+ (1) sudo yum install -y epel-release<br>
  
  (2) sudo yum makecache<br>
  
